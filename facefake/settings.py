@@ -13,6 +13,8 @@ https://docs.djangoproject.com/en/1.8/ref/settings/
 # Build paths inside the project like this: os.path.join(BASE_DIR, ...)
 import os
 
+import mongoengine
+
 BASE_DIR = os.path.dirname(os.path.dirname(os.path.abspath(__file__)))
 
 
@@ -37,6 +39,7 @@ INSTALLED_APPS = (
     'django.contrib.sessions',
     'django.contrib.messages',
     'django.contrib.staticfiles',
+    'app.user',
 )
 
 MIDDLEWARE_CLASSES = (
@@ -76,12 +79,25 @@ WSGI_APPLICATION = 'facefake.wsgi.application'
 
 DATABASES = {
     'default': {
-        'ENGINE': 'django.db.backends.sqlite3',
-        'NAME': os.path.join(BASE_DIR, 'db.sqlite3'),
+        'ENGINE': '',
+
     }
 }
 
+# setup connect to database Mongodb
+SESSION_ENGINE = 'mongoengine.django.sessions'
+_MONGODB_USER = 'admin'
+_MONGODB_PASSWD = 'hoada921'
+_MONGODB_HOST = 'localhost:27017'
+_MONGODB_NAME = 'facefake'
+_MONGODB_DATABASE_HOST = 'mongodb://%s:%s@%s/%s' % (_MONGODB_USER, _MONGODB_PASSWD, _MONGODB_HOST, _MONGODB_NAME)
+mongoengine.connect(_MONGODB_NAME, host=_MONGODB_DATABASE_HOST)
 
+# Use MongoEngine's User
+AUTHENTICATION_BACKENDS = ('mongoengine.django.auth.MongoEngineBackend',)
+
+# Hack the test runner
+TEST_RUNNER = 'yourproject.tests.NoSQLTestRunner'
 # Internationalization
 # https://docs.djangoproject.com/en/1.8/topics/i18n/
 
@@ -100,3 +116,13 @@ USE_TZ = True
 # https://docs.djangoproject.com/en/1.8/howto/static-files/
 
 STATIC_URL = '/static/'
+
+STATICFILES_DIRS = (
+    os.path.join(BASE_DIR, 'static'),
+)
+
+MEDIA_ROOT = os.path.join(BASE_DIR, 'media/')
+
+MEDIA_URL = '/media/'
+
+AVATAR_DIR = 'avatar'
