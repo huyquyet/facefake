@@ -26,12 +26,35 @@ SECRET_KEY = '$n371j#d*5$mpcu5)v)7vpnj%qn79v+%(+h(034m!eqe_!v8bh'
 
 # SECURITY WARNING: don't run with debug turned on in production!
 DEBUG = True
-
+TEMPLATE_DEBUG = DEBUG
 ALLOWED_HOSTS = []
 
+ADMINS = (
+    # ('Your Name', 'your_email@example.com'),
+)
 
+MANAGERS = ADMINS
 # Application definition
 
+# MongoDB settings
+MONGODB_DATABASES = {
+    'default': {'name': 'facefake'}
+}
+DJANGO_MONGOENGINE_OVERRIDE_ADMIN = True
+
+SESSION_ENGINE = 'django_mongoengine.sessions'
+
+# # setup connect to database Mongodb
+# _MONGODB_USER = 'admin'
+# _MONGODB_PASSWD = 'hoada921'
+# _MONGODB_HOST = 'localhost:27017'
+# _MONGODB_NAME = 'facefake'
+# _MONGODB_DATABASE_HOST = 'mongodb://%s:%s@%s/%s' % (_MONGODB_USER, _MONGODB_PASSWD, _MONGODB_HOST, _MONGODB_NAME)
+# mongoengine.connect(_MONGODB_NAME, host=_MONGODB_DATABASE_HOST)
+
+DATABASES = {
+    'default': {'ENGINE': 'django.db.backends.dummy'}
+}
 INSTALLED_APPS = (
     'django.contrib.admin',
     'django.contrib.auth',
@@ -40,7 +63,17 @@ INSTALLED_APPS = (
     'django.contrib.messages',
     'django.contrib.staticfiles',
     'app.user',
+    'app.friend',
+    'app.status',
+    'app.likes',
+    'app.comments',
+    'django_mongoengine.mongo_auth',
+    'django_mongoengine.mongo_admin.sites',
+    'django_mongoengine.mongo_admin',
+
 )
+
+INTERNAL_IPS = ('127.0.0.1', '10.0.2.2',)
 
 MIDDLEWARE_CLASSES = (
     'django.contrib.sessions.middleware.SessionMiddleware',
@@ -58,7 +91,7 @@ ROOT_URLCONF = 'facefake.urls'
 TEMPLATES = [
     {
         'BACKEND': 'django.template.backends.django.DjangoTemplates',
-        'DIRS': [],
+        'DIRS': [os.path.join(BASE_DIR, 'templates/')],
         'APP_DIRS': True,
         'OPTIONS': {
             'context_processors': [
@@ -74,27 +107,15 @@ TEMPLATES = [
 WSGI_APPLICATION = 'facefake.wsgi.application'
 
 
-# Database
-# https://docs.djangoproject.com/en/1.8/ref/settings/#databases
 
-DATABASES = {
-    'default': {
-        'ENGINE': '',
 
-    }
-}
-
-# setup connect to database Mongodb
-SESSION_ENGINE = 'mongoengine.django.sessions'
-_MONGODB_USER = 'admin'
-_MONGODB_PASSWD = 'hoada921'
-_MONGODB_HOST = 'localhost:27017'
-_MONGODB_NAME = 'facefake'
-_MONGODB_DATABASE_HOST = 'mongodb://%s:%s@%s/%s' % (_MONGODB_USER, _MONGODB_PASSWD, _MONGODB_HOST, _MONGODB_NAME)
-mongoengine.connect(_MONGODB_NAME, host=_MONGODB_DATABASE_HOST)
 
 # Use MongoEngine's User
-AUTHENTICATION_BACKENDS = ('mongoengine.django.auth.MongoEngineBackend',)
+# AUTHENTICATION_BACKENDS = ('mongoengine.django.auth.MongoEngineBackend',)
+
+AUTHENTICATION_BACKENDS = (
+    'django_mongoengine.mongo_auth.backends.MongoEngineBackend',
+)
 
 # Hack the test runner
 TEST_RUNNER = 'yourproject.tests.NoSQLTestRunner'
@@ -111,6 +132,7 @@ USE_L10N = True
 
 USE_TZ = True
 
+SITE_ID = 1
 
 # Static files (CSS, JavaScript, Images)
 # https://docs.djangoproject.com/en/1.8/howto/static-files/
