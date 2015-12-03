@@ -15,6 +15,8 @@ import os
 
 import mongoengine
 
+from facefake import modelrouter
+
 BASE_DIR = os.path.dirname(os.path.dirname(os.path.abspath(__file__)))
 
 
@@ -38,7 +40,7 @@ MANAGERS = ADMINS
 
 # MongoDB settings
 MONGODB_DATABASES = {
-    'default': {'name': 'facefake'}
+    'default': {'name': 'face_fake'}
 }
 DJANGO_MONGOENGINE_OVERRIDE_ADMIN = True
 
@@ -52,8 +54,19 @@ SESSION_ENGINE = 'django_mongoengine.sessions'
 # _MONGODB_DATABASE_HOST = 'mongodb://%s:%s@%s/%s' % (_MONGODB_USER, _MONGODB_PASSWD, _MONGODB_HOST, _MONGODB_NAME)
 # mongoengine.connect(_MONGODB_NAME, host=_MONGODB_DATABASE_HOST)
 
+DATABASE_ROUTERS = ['facefake.modelrouter.DatabaseAppsRouter', ]
+DATABASE_APPS_MAPPING = {'no_sql': 'no_sql'}
 DATABASES = {
-    'default': {'ENGINE': 'django.db.backends.dummy'}
+    'default': {
+        'ENGINE': 'django.db.backends.mysql',
+        'NAME': 'facefake_project',
+        'USER': 'root',
+        'PASSWORD': 'hoada921',
+        'HOST': '127.0.0.1',
+        'PORT': '3306', },
+    'no_sql': {
+        'ENGINE': 'django.db.backends.dummy',
+    }
 }
 INSTALLED_APPS = (
     'django.contrib.admin',
@@ -67,9 +80,9 @@ INSTALLED_APPS = (
     'app.status',
     'app.likes',
     'app.comments',
-    'django_mongoengine.mongo_auth',
-    'django_mongoengine.mongo_admin.sites',
-    'django_mongoengine.mongo_admin',
+    # 'django_mongoengine.mongo_auth',
+    # 'django_mongoengine.mongo_admin.sites',
+    # 'django_mongoengine.mongo_admin',
 
 )
 

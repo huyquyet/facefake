@@ -1,0 +1,18 @@
+<form action="{% url 'user:user_register' %}" method="post" role="form" class="form-inline">
+    {% csrf_token %}
+    {#    {% for field in form %}#}
+    {#        <div class="form-group {% if field.errors %} has-error {% endif %} has-feedback">#}
+    {#            <span class="text-success">{{ field.name }}</span>#}
+    {#            <input type="{{ field.field.widget.input_type }}" name="{{ field.name }}" class="form-control"#}
+    {#                   placeholder="{{ field.name }}">#}
+    {#            <span class="help-block">{{ field.errors }}</span>#}
+    {#        </div>#}
+    {#    {% endfor %}#}
+    {{ form.as_p }}
+    <label>other_name</label>
+
+
+    <p><input type="hidden" name="next" value="{{ request.GET.next|default:'' }}"></p>
+    <button type="submit" class="btn btn-primary ">Sign In</button>
+    <a href="{% url 'user:user_register' %}" type="button" class="btn btn-primary " style="float: right">Register</a>
+</form>

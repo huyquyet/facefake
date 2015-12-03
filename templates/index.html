@@ -1,0 +1,10 @@
+{% for post in list_post %}
+    {{ post.title }}
+    <br>
+    {{ post.slug }}
+{% endfor %}
+<a href="{% url 'user:post_form' %}">new post</a>
+
+{{ user.username }}
+
+<a href="{% url 'user:user_update' user.pk %}"> upadte file</a>
